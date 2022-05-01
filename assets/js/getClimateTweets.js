@@ -3,7 +3,7 @@ const getClimateTweets = () => {
   const tweetEndpoint = "/utils/twitter/get_tweets.php"
   const testQuery = encode("#london")
 
-  $.getJSON(tweetEndpoint + "?q=" + testQuery, results => parseTweets(results))
+  $.getJSON(tweetEndpoint + "?q=" + query, results => parseTweets(results))
 }
 
 const parseTweets = tweets => {
