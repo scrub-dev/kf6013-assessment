@@ -33,3 +33,10 @@ const getUserInformation = (tweet, users) => {
 const encode = string => encodeURIComponent(string)
 
 const getDefaultLocation = () => { return {lat: 54.977399, lng: -1.6079944, name: "SNE HQ"}}
+
+$(document).ready(() => {
+  $("#tweet-list").hide()
+  $("#tweet-toggle").click(() => {
+    $("#tweet-list").toggle()
+  })
+})

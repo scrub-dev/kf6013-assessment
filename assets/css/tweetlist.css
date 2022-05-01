@@ -14,3 +14,9 @@
   margin-right: 0.5em;
   padding: 0.2em;
 }
+
+.tweet-container button {
+  border: none;
+  padding: 1em;
+  margin-top: 0.5em;
+}

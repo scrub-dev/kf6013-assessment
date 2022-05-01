@@ -72,3 +72,14 @@ footer p {
   border: 1px solid black;
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
+
+.tweet-container button {
+  background-color: var(--main-light);
+  box-shadow: -0.2em 0.2em var(--accent-light);
+}
+
+.tweet-container button:hover {
+  background-color: var(--main-dark);
+  color: white;
+  box-shadow: -0.2em 0.2em var(--accent-dark);
+}
