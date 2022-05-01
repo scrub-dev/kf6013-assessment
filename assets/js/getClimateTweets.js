@@ -1,14 +1,13 @@
 const getClimateTweets = () => {
   const query = encode("(#climatechange OR #netzero) OR (#climatechange #netzero)")
   const tweetEndpoint = "/utils/twitter/get_tweets.php"
-  const testQuery = encode("#uk")
+  const testQuery = encode("#london")
 
-  $.getJSON(tweetEndpoint + "?q=" + query, results => parseTweets(results))
+  $.getJSON(tweetEndpoint + "?q=" + testQuery, results => parseTweets(results))
 }
 
 const parseTweets = tweets => {
   let locationTweets = []
-  console.log(tweets)
   tweets.data.forEach(tweet => {
     if(tweet.entities.hashtags !== undefined){
       cleanHashtags(tweet)
@@ -21,7 +20,11 @@ const parseTweets = tweets => {
           tweet.geo.point = boxToPoint(tweet.geo.geo.bbox)
         }
       })
-      let location = tweet.geo.point
+      let location = {
+        lat: tweet.geo.point.lat,
+        lng: tweet.geo.point.lng,
+        name: `${tweet.geo.country_code}, ${tweet.geo.name}`
+      }
       let icon = calculateIcon(tweet.hashtags)
       locationTweets.push({icon: icon, 
         location: location, 
@@ -42,12 +45,12 @@ const parseTweets = tweets => {
       markers.push(marker)
     })
     let bounds = generateBounds(markers)
-    console.log(bounds)
     map.fitBounds(bounds)
+    if(markers.length === 1) map.setZoom(14) // if there is only 1 marker, set it to this marker
   }
 }
 
-const generateMarker = (icon, location, content, author) => {
+const generateMarker = (icon, location, content, author, locationName) => {
   let map = getMap()
   const marker = new google.maps.Marker({
     position: location,
@@ -69,12 +72,18 @@ const generateMarker = (icon, location, content, author) => {
     content: contentString
   })
 
-  marker.addListener("click", () => {
+  marker.addListener("mouseover", () => {
     infoWindow.open({
       anchor: marker,
       map,
-      shouldFocus: false
     })
+  })
+  marker.addListener("mouseout", () => {
+    infoWindow.close()
+  })
+
+  marker.addListener("click", ()=> {
+    getWeather(location)
   })
 
   return marker

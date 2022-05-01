@@ -32,4 +32,4 @@ const getUserInformation = (tweet, users) => {
 
 const encode = string => encodeURIComponent(string)
 
-const getDefaultLocation = () => { return {lat: 54.977399, lng: -1.6079944}}
+const getDefaultLocation = () => { return {lat: 54.977399, lng: -1.6079944, name: "SNE HQ"}}
