@@ -1,0 +1,10 @@
+<?php
+define('TWITTER', Array(
+  "CONSUMER_KEY" => "LdQlWwq26yAcG4hWd6UI4pDwt",
+  "CONSUMER_SECRET" => "6l8gDJxVr6mDeEwqmjr79zcn1Alnk41MhxR7Yq8IMxfhdJ3hdO",
+  "ACCESS_TOKEN" => "978209573701025792-EiiK2fDAAQMgSQzpvK52Fzo8N2LsHZk",
+  "ACCESS_SECRET" => "kfB8V1POVonJpXlrwgIzBTtw0tqNHVAtV8qVymfeBvO4Q"
+));
+
+
+?>

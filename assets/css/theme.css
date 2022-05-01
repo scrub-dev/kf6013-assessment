@@ -1,0 +1,48 @@
+:root {
+  --main: #78909c;
+  --main-light: #90a4ae;
+  --main-dark:#455a64;
+  --main-background: #eceff1;
+
+  --accent: #d81b60;
+  --accent-light: #ec407a;
+  --accent-dark: #880e4f;
+
+  --text-font: Arial, Helvetica, sans-serif;
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: var(--text-font);
+  color: black;
+}
+
+body {
+  background-color: var(--main-background);
+}
+
+nav {
+  background-color: var(--main-light);
+}
+
+nav ul li a:hover {
+  background-color: var(--main-dark);
+  transition: 0.3s;
+  color: white;
+}
+
+#title {
+  /* text-decoration: underline;
+  text-underline-offset: 1em;
+  text-decoration-color: var(--accent-light); */
+  border-bottom: 0.2em solid var(--accent);
+  padding-left: 1em;
+  padding-right: 1em;
+}
+#title:hover {
+  border-bottom: 0.2em solid var(--accent-dark);
+  padding-left: 2em;
+  padding-right: 2em;
+  transition: 0.2s;
+}
