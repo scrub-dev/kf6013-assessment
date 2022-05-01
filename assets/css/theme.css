@@ -38,6 +38,9 @@ header {
 header h1 {
   color:white;
 }
+footer {
+  background-color: var(--main-dark);
+}
 
 #title {
   /* text-decoration: underline;
@@ -50,4 +53,8 @@ header h1 {
 #title:hover {
   border-bottom: 0.2em solid var(--accent-dark);
   transition: 0.2s;
+}
+
+footer p {
+  color: white;
 }
