@@ -1,9 +1,3 @@
-//Sustainable NE HQ LAT/LNG
-const DEFAULT_LOCATION = { //Default location
-  lat: 54.977399,
-  lng: -1.6079944
-}
-
 const weatherEndpoint = "/utils/weather.php" //Local endpoint so UID is hidden
 
 //JQuery function for getting the weather data
@@ -38,5 +32,5 @@ const generateWeatherWidget = weather => {
 
 //When document first loads, get default location
 $(document).ready( ()=> {
-  getWeather(DEFAULT_LOCATION)
+  getWeather(getDefaultLocation())
 })

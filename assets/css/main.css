@@ -3,3 +3,11 @@ main {
   margin-left: 15%;
   margin-right: 15%;
 }
+
+.left-padding {
+  padding-left: 1rem;
+}
+.horizontal-padding {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}

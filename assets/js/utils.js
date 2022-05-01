@@ -4,10 +4,12 @@ const lowercase = string => string.toLowerCase();
 
 const uppercase = string => string.toUpperCase();
 
+//convers bbox geoJSON to a single point by finding the centre of the box it defines
 const boxToPoint = array => {
   return {lat: (array[0] + array[2]) / 2, lng: (array[1]  + array[3] ) / 2}
 }
 
+// converts the entitity array of hashtag objects into an array of hashtag strings
 const cleanHashtags = tweet => {
   tweet.hashtags = []
   tweet.entities.hashtags.forEach(hashtag => {
@@ -15,8 +17,17 @@ const cleanHashtags = tweet => {
   })
 }
 
+// get an icon based on what hashtags are present
 const calculateIcon = hashtags => {
   if(hashtags.includes("climatechange") && hashtags.includes("netzero")) return getIcon(ICONS.both)
   if(hashtags.includes("climatechange")) return getIcon(ICONS.climate_change)
   if(hashtags.includes("netzero")) return getIcon(ICONS.net_zero)
 }
+
+const getUserInformation = (tweet, users) => {
+  return users.find(user => user.id === tweet.author_id)
+}
+
+const encode = string => encodeURIComponent(string)
+
+const getDefaultLocation = () => { return {lat: 54.977399, lng: -1.6079944}}

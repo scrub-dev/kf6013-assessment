@@ -2,7 +2,7 @@
   --main: #78909c;
   --main-light: #90a4ae;
   --main-dark:#455a64;
-  --main-background: #eceff1;
+  --main-background: #b0bec5;
 
   --accent: #d81b60;
   --accent-light: #ec407a;
@@ -23,13 +23,20 @@ body {
 }
 
 nav {
-  background-color: var(--main-light);
+  background-color: var(--main);
 }
 
 nav ul li a:hover {
   background-color: var(--main-dark);
   transition: 0.3s;
   color: white;
+}
+
+header {
+  background-color: var(--main-dark);
+}
+header h1 {
+  color:white;
 }
 
 #title {
@@ -42,7 +49,5 @@ nav ul li a:hover {
 }
 #title:hover {
   border-bottom: 0.2em solid var(--accent-dark);
-  padding-left: 2em;
-  padding-right: 2em;
   transition: 0.2s;
 }

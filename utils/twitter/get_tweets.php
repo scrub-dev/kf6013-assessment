@@ -8,8 +8,8 @@ $query_string = $_REQUEST['q'];//get query string by requests
 $params = [
   "query"=>$query_string, // the string to search by
   "max_results" => 100,
-  'tweet.fields' => 'text,geo,id,entities',
-  'expansions' => 'geo.place_id', 
+  'tweet.fields' => 'text,geo,id,entities,author_id',
+  'expansions' => 'geo.place_id,author_id', 
   'place.fields' =>'country,country_code,full_name,geo,id,name',
 ];
 
