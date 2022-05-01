@@ -1,5 +1,5 @@
 const FILE_TYPE = ".png"
-const FILE_PATH = "../images/"
+const FILE_PATH = "assets/images/"
 const ICONS = {
   net_zero:"netzero",
   climate_change:"climatechange",
