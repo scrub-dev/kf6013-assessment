@@ -33,7 +33,6 @@ const parseTweets = tweets => {
       })
     }
   })
-
   if(locationTweets.length > 0){
     let markers = []
     locationTweets.forEach(tweet => {
@@ -48,6 +47,7 @@ const parseTweets = tweets => {
     map.fitBounds(bounds)
     if(markers.length === 1) map.setZoom(14) // if there is only 1 marker, set it to this marker
   }
+  displayTweets(tweets)
 }
 
 const generateMarker = (icon, location, content, author, locationName) => {
@@ -95,8 +95,18 @@ const generateBounds = markers => {
   return bounds
 }
 
-const displayTweets = (tweets, count) => {
-  const displayTweets = tweets.slice(0, count);
+const displayTweets = (tweets) => {
+  let html = ""
+  tweets.data.forEach(tweet => {
+    html += 
+    `
+    <li>
+      <p>${tweet.text}</p>
+      <p>@${tweet.author.username}</p>
+    </li>
+    `
+  })
+  $("#tweet-list").html(html)
 }
 
 $(document).ready(getClimateTweets())
