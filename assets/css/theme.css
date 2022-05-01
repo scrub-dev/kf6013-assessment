@@ -59,16 +59,14 @@ footer p {
   color: white;
 }
 
-#tweet-list li {
-  background-color: var(--main-dark);
-  color: white;
+#tweet-list li:hover {
+  background-color: var(--main);
   border: 1px solid white;
   box-shadow: -0.2em 0.2em var(--accent-dark);
 }
 
-#tweet-list li:hover {
+#tweet-list li {
   background-color: var(--main-light);
-  color: black;
   border: 1px solid black;
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
