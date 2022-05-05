@@ -6,7 +6,6 @@ const getClimateTweets = () => {
 }
 
 const parseTweets = tweets => {                                                  // Parse the tweets from the quert
-  console.log(tweets)
   let locationTweets = []
   tweets.data.forEach(tweet => {
     if(tweet.entities.hashtags !== undefined){

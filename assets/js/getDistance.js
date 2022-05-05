@@ -25,7 +25,12 @@ const getDistance = (location1, location2) => {
         unitSystem: UNITS.imperial
     }, (res, status) => {
         if(status !== "OK" || res.rows[0].elements[0].status !== "OK") return
-        console.log(res)
+        const distanceObject = {
+            origin: res.originAddresses[0],
+            destination: res.destinationAddresses[0],
+            distance: res.rows[0].elements[0].distance,
+            duration: res.rows[0].elements[0].duration
+        }
     })
 }
 
@@ -46,7 +51,6 @@ const getDirections = (location1, location2) => {
     directionRenderer.setMap(getMap())
 
     directionService.route(request, (res, status) => {
-        console.log(status)
         if(status === 'OK') directionRenderer.setDirections(res)
     })
 }
