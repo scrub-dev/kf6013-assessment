@@ -1,11 +1,11 @@
 <?php
 namespace twitter;
 
-include_once('../config.php');
+include_once('../config.php');            // Load the config file that contains the keys
 require "../vendor/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-function connection_v2(){ // create a connection for other functions and classes to use
+function connection_v2(){                 // create a connection for other functions and classes to use
   $conn =  new TwitterOAuth(
     TWITTER['CONSUMER_KEY'], 
     TWITTER['CONSUMER_SECRET'], 
@@ -15,7 +15,7 @@ function connection_v2(){ // create a connection for other functions and classes
   return $conn;
 }
 
-function connection_v1(){ // create a connection for other functions and classes to use
+function connection_v1(){                 // create a connection for other functions and classes to use
   $conn =  new TwitterOAuth(
     TWITTER['CONSUMER_KEY'], 
     TWITTER['CONSUMER_SECRET'], 

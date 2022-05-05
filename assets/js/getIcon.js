@@ -6,6 +6,6 @@ const ICONS = {
   both: "combined"
 }
 
-const getIcon = ICON => {
+const getIcon = ICON => {                 // Returns the filepath to a specified icon in ICONS object
   return FILE_PATH + ICON + FILE_TYPE
 }

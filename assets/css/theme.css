@@ -66,13 +66,14 @@ footer p {
 }
 
 #tweet-list li {
+  border-radius: 0.5em;
   background-color: var(--main-light);
   border: 1px solid black;
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
 
 .tweet-container button {
-  background-color: var(--main-light);
+  background-color: var(--main);
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
 
