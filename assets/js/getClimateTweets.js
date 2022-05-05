@@ -47,12 +47,14 @@ const parseTweets = tweets => {                                                 
   markers.push(HQMarker())                                                       // Add the initial marker (SNEHQ)
   if(locationTweets.length > 0){                                                 // Check if there are any tweets with data before continuing
     locationTweets.forEach(tweet => {                                            // For each geo tweet, generate a market
-      let marker = generateMarker(tweet.icon, 
-        tweet.location, 
-        tweet.content, 
-        tweet.author
-      )
-      markers.push(marker)                                                       // Add the generated marker to the markers array for calculated the bounding box of the markers later
+      if(checkPoint(tweet.location)){                                                  // Make sure point is in the UK
+        let marker = generateMarker(tweet.icon, 
+          tweet.location, 
+          tweet.content, 
+          tweet.author
+        )
+        markers.push(marker)                                                     // Add the generated marker to the markers array for calculated the bounding box of the markers later
+      }                                                                          
     })
   }
 
@@ -65,8 +67,7 @@ const parseTweets = tweets => {                                                 
 }
 
 const generateMarker = (icon, location, content, author) => {                    // Generates a marker object for adding to the google map object
-  if(!checkPoint(location)) return                                               // Make sure the marker is inside the UK
-  let map = getMap() // Get the google map object                                // Get the google map object from another file
+  let map = getMap()                                                             // Get the google map object from another file
   const marker = new google.maps.Marker({                                        // Create a new google map marker object
     position: location,                                             
     map,
@@ -99,6 +100,8 @@ const generateMarker = (icon, location, content, author) => {                   
 
   marker.addListener("click", ()=> {                                             // When the marker is clicked
     getWeather(location)                                                         // Update the weather widget to the weather at the marker's location
+    getDistance(location)                                                        // Get the distance to SNE HQ
+    getDirections(location)                                                      // Get the directions to SNE HQ
   })
 
   return marker                                                                  // Return the marker object so the map can calculate its bounds
@@ -106,7 +109,9 @@ const generateMarker = (icon, location, content, author) => {                   
 
 const generateBounds = markers => {                                              // Generate the bounds based on an array of markers
   let bounds = new google.maps.LatLngBounds()                                    // Generatge a google LatLngBounds object
-  markers.forEach(marker => bounds.extend(marker.getPosition()))                 // For every marker, extend the bounds to that markers position
+  markers.forEach(marker => {
+    if(marker.getPosition() !== undefined) bounds.extend(marker.getPosition())   // For every marker, extend the bounds to that markers position
+  })                 
   return bounds                                                                  // return the bounds object
 }
 
@@ -137,11 +142,12 @@ const checkPoint = location => {                                                
     bl: {lat: 48.469447, lng: -10.987202}, //Bottom Left
   }
 
-  return (location.lat > UK_POINTS.bl.lat && location.lat < UK_POINTS.tr.lat) &&
+  return (location.lat > UK_POINTS.bl.lat && location.lat < UK_POINTS.tr.lat) && // Run the tweet query code when the document is ready
          (location.lng > UK_POINTS.bl.lng && location.lng < UK_POINTS.tr.lng)
+
 }
 
-$(document).ready(() => {                                                        // Run the tweet query code when the document is ready
+$(document).ready(() => {                                                        
     getClimateTweets()
   }
 )

@@ -33,6 +33,10 @@ const encode = string => encodeURIComponent(string)                             
 
 const getDefaultLocation = () => { return {lat: 54.977399, lng: -1.6079944, name: "SNE HQ"}}             // Provides a default location (SNE HQ)
 
+const areEqual = (location1, location2) => {
+  return (location1.lat === location2.lat && location2.lng === location1.lng)
+}
+
 $(document).ready(() => {                                                                                // Hides the tweet list on lauch of webpage
   $("#tweet-list").hide()
   $("#tweet-toggle").click(() => {                                                                       // Toggles visibility when the button is clickeds
