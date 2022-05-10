@@ -37,6 +37,11 @@ const areEqual = (location1, location2) => {
   return (location1.lat === location2.lat && location2.lng === location1.lng)
 }
 
+const getParam = name => {
+  let params = new URLSearchParams(window.location.search)
+  return params.get(name)
+}
+
 $(document).ready(() => {                                                                                // Hides the tweet list on lauch of webpage
   $("#tweet-list").hide()
   $("#tweet-toggle").click(() => {                                                                       // Toggles visibility when the button is clickeds

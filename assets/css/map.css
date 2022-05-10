@@ -5,3 +5,13 @@
 .map-container{
   height: 50vh;
 }
+
+#directions-panel {
+  float: right;
+  width: 100%
+}
+
+#distance-panel {
+  padding-top: 1em;
+  float:right;
+}

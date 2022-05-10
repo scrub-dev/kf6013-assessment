@@ -14,8 +14,7 @@
     <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/theme.css">
     <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="stylesheet" href="./assets/css/map.css">
-    <link rel="stylesheet" href="./assets/css/tweetlist.css">
+    <link rel="stylesheet" href="./assets/css/tweets.css">
 
   </head>
   <body>
@@ -32,10 +31,13 @@
     </nav>
     <main>
       <section>
-        <h1>About</h1>
-        <p>
-          This website was developed in accordance to the KF6013 Assessment Brief
-        </p>
+        <h2>Send a tweet</h2>
+        <form action="!#">
+          <label for="tweet">Tweet Contents</label>
+          <input type="text" id="tweet-box" name="tweet">
+          <p id="tweet-count">280</p>
+          <input type="submit" value="submit" id="send-tweet">
+        </form>
       </section>
     </main>
     <footer>
@@ -46,5 +48,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" defer></script>
     <script src="/assets/js/utils.js" defer></script>
     <script src="/assets/js/getWeather.js" defer></script>
+    <script src="/assets/js/sendTweet.js" defer></script>
   </body>
 </html>

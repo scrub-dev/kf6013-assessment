@@ -31,6 +31,12 @@ const getDistance = (location1, location2) => {
             distance: res.rows[0].elements[0].distance,
             duration: res.rows[0].elements[0].duration
         }
+        $("#distance-panel").html(`
+            <p>Origin: ${distanceObject.origin}</p>
+            <p>Destination: ${distanceObject.destination}</p>
+            <p>Distance: ${distanceObject.distance.text}</p>
+            <p>Duration: ${distanceObject.duration.text}</p>
+        `)
     })
 }
 
@@ -49,6 +55,7 @@ const getDirections = (location1, location2) => {
     }
 
     directionRenderer.setMap(getMap())
+    directionRenderer.setPanel(document.getElementById("directions-panel"))
 
     directionService.route(request, (res, status) => {
         if(status === 'OK') directionRenderer.setDirections(res)

@@ -46,7 +46,7 @@ const parseTweets = tweets => {                                                 
   markers.push(HQMarker())                                                       // Add the initial marker (SNEHQ)
   if(locationTweets.length > 0){                                                 // Check if there are any tweets with data before continuing
     locationTweets.forEach(tweet => {                                            // For each geo tweet, generate a market
-      if(checkPoint(tweet.location)){                                                  // Make sure point is in the UK
+      if(checkPoint(tweet.location)){                                            // Make sure point is in the UK
         let marker = generateMarker(tweet.icon, 
           tweet.location, 
           tweet.content, 

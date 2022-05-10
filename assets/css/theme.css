@@ -72,13 +72,19 @@ footer p {
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
 
-.tweet-container button {
+button, input[type=submit] {
   background-color: var(--main);
   box-shadow: -0.2em 0.2em var(--accent-light);
 }
 
-.tweet-container button:hover {
+button:hover, input[type=submit]:hover {
   background-color: var(--main-dark);
   color: white;
   box-shadow: -0.2em 0.2em var(--accent-dark);
+}
+
+input[type=submit] {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
 }
