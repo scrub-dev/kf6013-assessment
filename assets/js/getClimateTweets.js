@@ -5,64 +5,99 @@ const getClimateTweets = () => {
   $.getJSON(tweetEndpoint + "?q=" + query, results => parseTweets(results))
 }
 
-const parseTweets = tweets => {                                                  // Parse the tweets from the quert
-  let locationTweets = []
-  tweets.data.forEach(tweet => {
-    if(tweet.entities.hashtags !== undefined){
-      cleanHashtags(tweet)
+const getLocationFromUserLocation = async tweetLocation => {                    // Gets the geo data from a user's location
+  let url = "/utils/location.php"
+  let query = "?q=" + encode(tweetLocation)
+
+  return new Promise(resolve => {                                               // Returns a promise so the rest of the code can wait for it to complete
+    $.getJSON(url + query, res => {
+      resolve(res)
+    })
+  })
+}
+
+const getLocation = async (tweet, places) => {                                  // Creates a lat/lng pair for the location of the tweet (Either tweet position or User location)
+  if (tweet.geo && tweet.geo.place_id && places){                               // Check if tweet has location data
+    let geo = getGeoInformation(tweet, places)
+    return {
+      name: geo.name,
+      coordinates : geo.geo.bbox
     }
-    tweet.author = getUserInformation(tweet, tweets.includes.users)
-    if(tweet.geo){                                                               // Make sure there is geo data on the tweet
-      if(tweet.geo.coordinates){                                                 // Check if the Geo Data had coordinates or if it has a Place ID
-        if(tweet.geo.coordinates.type.toLowerCase() === "point"){                // Check if the Coordinate is of type "point"
-          tweet.geo.point = tweet.geo.coordinates.coordinates                    // Assign the geo data to a new object in the tweet object to be used later to add a marker to the map
-        }else{
-          tweet.geo.point = boxToPoint(tweet.geo.coordinates.coordinates)        // If the coordinates are a bounding box, convert the box to a point by averaging the location (./utils.js)
-        }
-      }else{                                                                     // If the geo data contains a place_id
-        tweets.includes.places.forEach(geo => {                                  // For each place in the query, find the place ID that matches the tweet
-          if(geo.id == tweet.geo.place_id) {                                     // If the ID's match from the tweet and the place id
-            tweet.geo = geo                                                      // Assign the tweet geo object to the place geo object
-            tweet.geo.point = boxToPoint(tweet.geo.geo.bbox)                     // Get the bounding box of the geo object and convert it to a point to put on the map
-          }
+  } else if (tweet.author.location) {                                           // Check if the author has a location
+    let results = await getLocationFromUserLocation(tweet.author.location)
+    let status = results.status
+    results = results.results
+    if(status !== "OK") return                                                  // Makes sure its a valid location
+    return {
+      name: results[0].address_components[0].short_name,
+      coordinates: results[0].geometry.location
+    }
+  }
+}
+
+const parseTweets = async tweets => {                                           // Parses the tweets, adding geo data and user data, cleaning hashtags
+  let tweetPromiseArr = []                                                      // Array to store parseTweet promises
+  tweets.data.forEach(async tweet => {                                          // Parses all tweets
+    // if(!tweet.text.startsWith("RT"))                                            // Skip retweets
+      tweetPromiseArr.push(parseTweet(tweet, tweets))
+  })
+
+  let parsedTweets = await Promise.all(tweetPromiseArr)                         // Waits for all tweet parsing operations to complete
+
+  let locationTweets = []
+  parsedTweets.forEach(tweet => {                                               // Loops over the now parsed tweets
+    if(tweet.geo){                                                              // Checks if tweets have geo data
+      let icon = calculateIcon(tweet.hashtags)                                  // Gets the icon associated with the tweet based on hashtag contents
+      if(icon !== undefined){                                                   // Ensure an Icon has been set before making the object (Icon undefined happens during a RT Thread)
+        locationTweets.push({                                                   // creates new object containing the tweet information and adds it to the array
+          location: {
+            lat: tweet.geo.coordinates.lat,
+            lng: tweet.geo.coordinates.lng,
+            name: tweet.geo.name
+          },
+          content: tweet.text,
+          author: tweet.author,
+          icon: icon
         })
       }
-
-      let location = {                                                           // Creates a location object with the lat/lng and location name 
-        lat: tweet.geo.point.lat,
-        lng: tweet.geo.point.lng,
-        name: `${tweet.geo.country_code}, ${tweet.geo.name}`
-      }
-      let icon = calculateIcon(tweet.hashtags)                                   // Get the icon based on the tweets hashtags
-      locationTweets.push({icon: icon,                                           // Create an an object with the icon, location, tweet content and tweet author to an array of tweets with location data
-        location: location, 
-        content: tweet.text, 
-        author: tweet.author
-      })
     }
   })
 
-  let markers = []                                                               // Create an array of markers to be places on the map
-  markers.push(HQMarker())                                                       // Add the initial marker (SNEHQ)
-  if(locationTweets.length > 0){                                                 // Check if there are any tweets with data before continuing
-    locationTweets.forEach(tweet => {                                            // For each geo tweet, generate a market
-      if(checkPoint(tweet.location)){                                            // Make sure point is in the UK
-        let marker = generateMarker(tweet.icon, 
-          tweet.location, 
-          tweet.content, 
-          tweet.author
-        )
-        markers.push(marker)                                                     // Add the generated marker to the markers array for calculated the bounding box of the markers later
-      }                                                                          
-    })
-  }
+  let markers = addMarkers(locationTweets)                                      // Creates the markers on the map based
+  fitMarkers(markers)                                                           // Fits the map to the markers so all markers are visible
+  displayTweets(tweets)                                                         // Displays the tweets below the map for viewing
+}
 
-  let bounds = generateBounds(markers)                                           // Generate bounds for the map to follow
-  map.fitBounds(bounds)                                                          // Set the map zoom and position to make all markers visible
-  if(markers.length === 1) map.setZoom(14)                                       // if there is only 1 marker, set it to this marker with a set zoom
-  
-  displayTweets(tweets)                                                          // Add all the tweets from the query to the page
-  // addHQMarker()
+const parseTweet = (tweet, tweets) => {                                         // Takes a tweet and parses it
+  return new Promise(async res => {                                             // this function returns a promise so it can get user information if required
+    if(tweet.entities.hashtags) cleanHashtags(tweet)                            // Cleans the hashtags (utils.js)
+    tweet.author = getUserInformation(tweet, tweets.includes.users)             // Gets the user informaition (utils.js)
+    tweet.geo = await getLocation(tweet)                                        // gets the geo data for the tweet and adds it to the tweet object
+    res(tweet)                                                                  // resolves the promise with the new tweet object
+  })
+}
+
+const addMarkers = locationTweets => {                                          // Adds markers based on locationTweets array
+  let markers = []
+  markers.push(HQMarker())                                                      // Adds the SNE HQ marker by default
+  locationTweets.forEach(tweet => {                                             // Loops over each entry in the locationTweets array
+    if(checkPoint(tweet.location)){                                             // Checks to make sure the tweet is based in the UK
+      let marker = generateMarker(                                              // Generate a marker on the map with that tweet data
+        tweet.icon,
+        tweet.location,
+        tweet.content,
+        tweet.author
+      )
+      markers.push(marker)                                                      // Add the newly generated marker to the markers array
+    }
+  })
+  return markers                                                                // Return the markers array for use with other functioned (like fitMarkers())
+}
+
+const fitMarkers = markers => {                                                 // Generates a bounding box that contains all markers, allowing te map to fit all markers
+  let bounds = generateBounds(markers)                                          // Generates the bounding box
+  map.fitBounds(bounds)                                                         // Gits the map to the bounding box
+  if(markers.length === 1) map.setZoom(14)                                      // Sets a default zoom if only one marker is added, because its too zoomed in otherwise
 }
 
 const generateMarker = (icon, location, content, author) => {                    // Generates a marker object for adding to the google map object
@@ -140,7 +175,6 @@ const checkPoint = location => {                                                
     tr: {lat: 63.251923, lng: -0.979067}, //Top right
     bl: {lat: 48.469447, lng: -10.987202}, //Bottom Left
   }
-
   return (location.lat > UK_POINTS.bl.lat && location.lat < UK_POINTS.tr.lat) && // Run the tweet query code when the document is ready
          (location.lng > UK_POINTS.bl.lng && location.lng < UK_POINTS.tr.lng)
 

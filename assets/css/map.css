@@ -13,5 +13,13 @@
 
 #distance-panel {
   padding-top: 1em;
-  float:right;
+  float: left;
+}
+
+#clear-directions {
+  border: none;
+  padding: 1em;
+  margin-top: 0.5em;
+  float: right;
+  margin-bottom: 0.5em;
 }

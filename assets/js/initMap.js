@@ -1,13 +1,13 @@
-$(document).ready(() => {initMap()})
+$(document).ready(() => {initMap()})                                // Initialise the map on load of document
 
-let map
-const initMap = () => {
-  map = new google.maps.Map(document.getElementById("map"), {
-      center: getDefaultLocation(),
-      zoom: 14
+let map                                                             // Create map object
+const initMap = () => {                                             // Function for initialising the map
+  map = new google.maps.Map(document.getElementById("map"), {       // Get the div where the map will be rendered
+      center: getDefaultLocation(),                                 // Centre the map on the default location
+      zoom: 14                                                      // Set a default zoom
   })
 }
 
-const getMap = () => {
-  if(map !== undefined) return map
+const getMap = () => {                                              // Function for getting the map object in other files
+  if(map !== undefined) return map                                  // make sure map is not undefined before returning the object
 }

@@ -22,20 +22,22 @@ const reset = () => {                                             // Resets twee
 
 
 const sendTweet = tweetString => {
+
   const endpoint = "/utils/twitter/send_tweet.php"                // Set the endpoint to the send tweet util
   const tweet = "?tweet=" + encode(tweetString)                   // encode the tweet string
   const token = "&oauth_token=" + CLIENT_TOKENS.oauth_token       // Get the token from the url
   const verify = "&oauth_token_secret=" + CLIENT_TOKENS.oauth_token_secret  // get the verifier from the url
   const url = endpoint + tweet + token + verify                   // combine the above strings
 
-  if(getParam("oauth_token") == null
-    || getParam("oauth_verifier") == null
-    || tweetString == undefined) return                           // Make sure the required params exist
+  if(getParam("oauth_token") == undefined
+    || getParam("oauth_verifier") == undefined
+    || tweetString == undefined
+    || tweetString.length <= 0) return                           // Make sure the required params exist
   
-  if(tweetString.length > 140){                                   //  Make sure the tweet contents string isn't too long
+  if(tweetString.length > TOTAL_CHARS){                           //  Make sure the tweet contents string isn't too long
     alert("Tweet length too long!")
     return
-  }                             
+  }
 
   $.getJSON(url, () => {})                                        // send the request
 }
